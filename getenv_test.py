@@ -79,3 +79,47 @@ def test_type_int():
     setenv(A.key, '1.2')
     with assert_raises(ValueError):
         A.get()
+
+
+@with_setup(setup, teardown)
+def test_type_float():
+    with assert_raises(TypeError):
+        Env('A', type=float, default=1)
+
+    A = Env('A', type=float, default=1.1)
+
+    assert_equal(A.get(), 1.1)
+
+    setenv(A.key, '1.2')
+    assert_equal(A.get(), 1.2)
+
+    setenv(A.key, 'wtf')
+    with assert_raises(ValueError):
+        A.get()
+
+    setenv(A.key, '12')
+    v = A.get()
+    assert_equal(v, 12.0)
+    assert_equal(type(v), float)
+
+
+@with_setup(setup, teardown)
+def test_type_bool():
+    with assert_raises(TypeError):
+        Env('A', type=bool, default=0)
+
+    A = Env('A', type=bool, default=True)
+
+    assert A.get() is True, 'a = {}'.format(A.get())
+
+    for i in A.bool_false_values:
+        setenv(A.key, i)
+        assert A.get() is False
+
+    for i in A.bool_true_values:
+        setenv(A.key, i)
+        assert A.get() is True
+
+    setenv(A.key, 'wtf')
+    with assert_raises(ValueError):
+        A.get()
