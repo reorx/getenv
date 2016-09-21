@@ -32,19 +32,16 @@ def test_basic():
 
     assert_equal(A.key, 'FOO_A')
 
-    # because of allow_null=False
+    # because default is not set
     with assert_raises(ValueError):
         A.get()
+
+    B = Env('B', default=None)
+    assert B.get() is None
 
     v = 'bar'
     setenv(A.key, v)
     assert_equal(A.get(), v)
-
-
-@with_setup(setup, teardown)
-def test_allow_null():
-    A = Env('A', allow_null=True)
-    assert A.get() is None
 
 
 @with_setup(setup, teardown)

@@ -13,8 +13,7 @@ class Env(object):
 
     def __init__(self, key,
                  type=str,
-                 default=None,
-                 allow_null=False):
+                 default=NotImplemented):
         if self.prefix is None:
             raise ValueError('Please set prefix before using Env class')
 
@@ -26,18 +25,21 @@ class Env(object):
         type = __builtin__.type
 
         self.default = default
-        if default is not None and not isinstance(default, self.type):
+        if default is not NotImplemented and \
+                default is not None and \
+                not isinstance(default, self.type):
             raise TypeError(
                 'default {} ({}) should be the same type of {}'.format(
                     default, type(default), self.type))
 
-        self.allow_null = allow_null
         Env._instances[self.key] = self
 
     def get(self):
-        v = os.environ.get(self.key, self.default)
-        if not self.allow_null and not v:
-            raise ValueError('No value for {} is not allowed'.format(self.key))
+        v = os.environ.get(self.key, None)
+        if v is None:
+            if self.default is NotImplemented:
+                raise ValueError('value not set')
+            return self.default
 
         # convert
         if self.type is str:
