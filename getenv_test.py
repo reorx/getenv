@@ -43,25 +43,34 @@ def test_basic():
 
 @with_setup(setup, teardown)
 def test_allow_null():
-    Env.set_prefix('FOO')
-
-    A = Env('{prefix}_A', allow_null=True)
+    A = Env('A', allow_null=True)
     assert A.get() is None
 
 
 @with_setup(setup, teardown)
 def test_default():
-    Env.set_prefix('FOO')
-
     # because 1 is not of type str
     with assert_raises(TypeError):
-        Env('{prefix}_A', default=1)
+        Env('A', default=1)
 
     default = 'qur'
-    A = Env('{prefix}_A', default=default)
+    A = Env('A', default=default)
     assert_equal(A.get(), default)
 
 
 @with_setup(setup, teardown)
-def test_type():
-    pass
+def test_type_int():
+    A = Env('A', type=int, default=1)
+
+    assert_equal(A.get(), 1)
+
+    setenv(A.key, '12')
+    assert_equal(A.get(), 12)
+
+    setenv(A.key, 'wtf')
+    with assert_raises(ValueError):
+        A.get()
+
+    setenv(A.key, '1.2')
+    with assert_raises(ValueError):
+        A.get()
