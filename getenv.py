@@ -20,6 +20,8 @@ class Env(object):
 
         self.key = key.format(prefix=self.prefix)
 
+        if type not in self.supported_types:
+            raise TypeError('{} is not supported'.format(type))
         self.type = type
         type = __builtin__.type
 

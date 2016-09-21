@@ -58,6 +58,11 @@ def test_default():
     assert_equal(A.get(), default)
 
 
+def test_type_not_supported():
+    with assert_raises(TypeError):
+        Env('A', type=object)
+
+
 @with_setup(setup, teardown)
 def test_type_int():
     A = Env('A', type=int, default=1)
