@@ -1,6 +1,6 @@
 # getenv
 
-Define environment variables for Python application to use.
+Environment variable definition with type.
 
 ## Install
 

@@ -4,6 +4,9 @@ import os
 import __builtin__
 
 
+__version__ = '0.1.0'
+
+
 class Env(object):
     prefix = None
     _instances = {}
