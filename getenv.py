@@ -8,6 +8,23 @@ __version__ = '0.1.0'
 
 
 class Env(object):
+    """
+    Usage:
+    >>> app_name = 'FOO'
+    >>>
+    >>> # Set the prefix for env vars
+    >>> Env.set_prefix(app_name)
+    >>>
+    >>> # Define your envs
+    >>> ENV_PROCESSES = Env('{prefix}_PROCESSES', type=int, default=1)
+    >>> ENV_DEBUG = Env('{prefix}_DEBUG', type=bool, default=False)
+    >>> ENV_OPERATOR = Env('{prefix}_OPERATOR', default=None)
+    >>>
+    >>> # Get values
+    >>> processes = ENV_PROCESSES.get()
+    >>> debug = ENV_DEBUG.get()
+    >>> operator = ENV_OPERATOR.get()
+    """
     prefix = None
     _instances = {}
     supported_types = (str, int, float, bool, )
@@ -69,3 +86,19 @@ class Env(object):
     @classmethod
     def set_prefix(cls, prefix):
         cls.prefix = prefix
+
+
+class SimpleEnv(object):
+    """
+    Usage:
+    >>> SimpleEnv.prefix = 'FOO'
+    >>> ENV_A = SimpleEnv('{prefix}_A')
+    >>> a = 'true' in ENV_A.get('true')
+    """
+    prefix = None
+
+    def __init__(self, key):
+        self.key = key.format(prefix=self.prefix)
+
+    def get(self, default=None):
+        return os.environ.get(self.key, default)
