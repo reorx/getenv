@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# coding=utf-8
 
 from setuptools import setup
 
@@ -33,6 +32,7 @@ setup(
     description='Environment variable definition with type',
     url='https://github.com/reorx/getenv',
     long_description=get_long_description(),
+    long_description_content_type='text/markdown',
     py_modules=[package_name],
     license='License :: OSI Approved :: MIT License',
 )

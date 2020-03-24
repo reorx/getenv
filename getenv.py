@@ -1,13 +1,13 @@
 # coding: utf-8
 
 import os
-import __builtin__
+import builtins
 
 
-__version__ = '0.1.0'
+__version__ = '0.2.0'
 
 
-class Env(object):
+class Env:
     """
     Usage:
     >>> app_name = 'FOO'
@@ -42,7 +42,7 @@ class Env(object):
         if type not in self.supported_types:
             raise TypeError('{} is not supported'.format(type))
         self.type = type
-        type = __builtin__.type
+        type = builtins.type
 
         self.default = default
         if default is not NotImplemented and \
@@ -88,7 +88,7 @@ class Env(object):
         cls.prefix = prefix
 
 
-class SimpleEnv(object):
+class SimpleEnv:
     """
     Usage:
     >>> SimpleEnv.prefix = 'FOO'
